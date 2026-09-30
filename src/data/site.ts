@@ -6,6 +6,7 @@ import type { ImageMetadata } from 'astro';
 import coverOmds from '../assets/images/cover-omds.jpg';
 import coverPolo from '../assets/images/cover-polo.jpg';
 import coverMata from '../assets/images/cover-mata.jpg';
+import coverPayme from '../assets/images/cover-payme.jpg';
 
 export const artist = {
   name: 'LOP3Z',
@@ -69,7 +70,8 @@ export const singles: Single[] = [
     title: 'PAY ME',
     subtitle: 'Single',
     spotify: 'https://open.spotify.com/track/5b3h1PAF103cjujbtPPGBJ',
-    // No artwork supplied — a typographic tile is rendered instead.
+    cover: coverPayme,
+    coverAlt: 'PAY ME cover art: illustrated LOP3Z in a black hat and suspenders at a desk with a cigar, a glass of whisky and stacks of cash.',
   },
 ];
 

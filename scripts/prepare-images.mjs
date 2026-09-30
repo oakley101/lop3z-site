@@ -26,6 +26,8 @@ const CROPS = {
   'cover-polo.jpg': [26 / 1120, 46 / 1280, 1096 / 1120, 1156 / 1280],
   // Screenshot: dark bars top and bottom.
   'cover-mata.jpg': [0, 54 / 1280, 1, 1222 / 1280],
+  // Instagram screenshot: square crop that drops the mute icon (bottom-right).
+  'cover-payme.jpg': [0, 50 / 1249, 1160 / 1209, 1210 / 1249],
 };
 
 await mkdir(OUT_DIR, { recursive: true });
