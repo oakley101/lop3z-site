@@ -1,0 +1,20 @@
+---
+// Fallback confirmation page for the booking form when JavaScript is disabled.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Equalizer from '../components/Equalizer.astro';
+import { contact } from '../data/site';
+---
+
+<BaseLayout title="Request sent — LOP3Z" noindex>
+  <main id="main" class="grid min-h-dvh place-items-center px-4 text-center">
+    <div class="max-w-lg">
+      <Equalizer bars={7} height="32px" width="5px" />
+      <h1 class="mt-6 text-4xl font-bold sm:text-5xl">Request sent — <span class="name-gradient">thank you!</span></h1>
+      <p class="mt-4 text-lg text-muted">
+        The LOP3Z team will be in touch soon. Anything urgent? Email
+        <a href={`mailto:${contact.email}`} class="text-fg underline underline-offset-4 hover:text-amber">{contact.email}</a>.
+      </p>
+      <a href="/" class="btn btn-primary mt-8">Back to the site</a>
+    </div>
+  </main>
+</BaseLayout>

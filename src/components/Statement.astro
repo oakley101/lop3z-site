@@ -1,0 +1,42 @@
+---
+import { Picture } from 'astro:assets';
+import bandImg from '../assets/images/band.jpg';
+import { artist } from '../data/site';
+import Equalizer from './Equalizer.astro';
+
+// Split "Sentence one. Sentence two." into lines; the last line gets the gradient.
+const lines = artist.statement.split(/(?<=\.)\s+/);
+---
+
+<section aria-label="Statement" class="relative isolate overflow-hidden border-y border-line">
+  <div class="absolute inset-0 -z-10">
+    <Picture
+      src={bandImg}
+      formats={['avif', 'webp']}
+      widths={[640, 1024]}
+      sizes="100vw"
+      alt="LOP3Z leaning against a pale blue wall in a black sweater vest pinned with safety pins, white shirt and striped red tie."
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-cover object-[50%_22%] lg:object-[70%_22%]"
+      pictureAttributes={{ class: 'block h-full w-full' }}
+    />
+  </div>
+  <div
+    class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,var(--color-ink)_0%,rgb(5_6_10/0.82)_45%,rgb(5_6_10/0.35)_100%)]"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="mx-auto flex min-h-[70svh] max-w-7xl items-center px-4 py-24 sm:px-6 lg:min-h-[640px] lg:px-8">
+    <figure class="reveal max-w-3xl">
+      <Equalizer bars={7} height="28px" width="4px" />
+      <blockquote class="mt-6">
+        <p class="text-[clamp(2.1rem,6vw,4.75rem)] leading-[1.05] font-extrabold tracking-tight text-balance">
+          {lines.map((line, i) => <span class:list={['block', i === lines.length - 1 && 'name-gradient']}>{line}</span>)}
+        </p>
+      </blockquote>
+      <figcaption class="mt-6 font-mono text-sm tracking-[0.2em] text-muted uppercase">— LOP3Z, “OMDs”</figcaption>
+    </figure>
+  </div>
+</section>

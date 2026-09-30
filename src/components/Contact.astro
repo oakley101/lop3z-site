@@ -1,0 +1,252 @@
+---
+import { contact } from '../data/site';
+
+const inquiryTypes = ['Live show / Festival', 'Private event', 'Feature / Collaboration', 'Press / Interview', 'Other'];
+---
+
+<section id="contact" aria-labelledby="contact-title" class="relative border-t border-line py-24 sm:py-32">
+  <div class="mx-auto grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-[5fr_7fr] lg:gap-20 lg:px-8">
+    <!-- Details -->
+    <div class="reveal">
+      <p class="section-kicker">04 // Contact</p>
+      <h2 id="contact-title" class="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">
+        Bookings <span class="text-amber">&amp;</span> enquiries
+      </h2>
+      <p class="mt-6 max-w-md text-lg text-muted">
+        Shows, festivals, features and press. Send the details and the team will get back to you.
+      </p>
+
+      <dl class="mt-10 space-y-7">
+        <div>
+          <dt class="label text-[0.7rem] text-cyan">Booking email</dt>
+          <dd class="mt-1.5">
+            <a
+              href={`mailto:${contact.email}`}
+              class="font-mono text-base break-all text-fg underline decoration-line decoration-2 underline-offset-4 transition-colors hover:text-amber hover:decoration-amber sm:text-lg"
+            >
+              {contact.email}
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt class="label text-[0.7rem] text-cyan">Phone / WhatsApp</dt>
+          <dd class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <a
+              href={`tel:${contact.phone}`}
+              class="font-mono text-base text-fg underline decoration-line decoration-2 underline-offset-4 transition-colors hover:text-amber hover:decoration-amber sm:text-lg"
+            >
+              {contact.phoneDisplay}
+            </a>
+            <a
+              href={contact.whatsapp}
+              target="_blank"
+              rel="noopener"
+              class="label border border-line px-3 py-1.5 text-[0.68rem] text-muted transition-colors hover:border-ok hover:text-ok"
+            >
+              Chat on WhatsApp<span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </dd>
+        </div>
+        <div>
+          <dt class="label text-[0.7rem] text-cyan">Management</dt>
+          <dd class="mt-1.5 text-lg text-fg">{contact.management}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Booking form (Netlify Forms) -->
+    <div class="reveal card p-5 sm:p-8">
+      <form
+        id="booking-form"
+        name="booking"
+        method="POST"
+        action="/thanks/"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        data-email={contact.email}
+        aria-labelledby="booking-form-title"
+        aria-describedby="booking-form-note"
+        class="grid gap-5 sm:grid-cols-2"
+      >
+        <input type="hidden" name="form-name" value="booking" />
+        <p class="hidden" aria-hidden="true">
+          <label>Don’t fill this out if you’re human: <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
+        </p>
+
+        <div class="sm:col-span-2">
+          <h3 id="booking-form-title" class="text-2xl font-bold">Booking request</h3>
+          <p id="booking-form-note" class="mt-1 text-sm text-muted">
+            Fields marked <span aria-hidden="true" class="text-amber">*</span><span class="sr-only">with an asterisk</span> are required.
+          </p>
+        </div>
+
+        <div>
+          <label for="bf-name" class="label mb-2 block text-[0.7rem] text-fg">
+            Name <span aria-hidden="true" class="text-amber">*</span>
+          </label>
+          <input id="bf-name" name="name" type="text" required autocomplete="name" class="field" aria-describedby="bf-name-error" />
+          <p id="bf-name-error" class="mt-1.5 hidden text-sm text-danger" data-error></p>
+        </div>
+
+        <div>
+          <label for="bf-email" class="label mb-2 block text-[0.7rem] text-fg">
+            Email <span aria-hidden="true" class="text-amber">*</span>
+          </label>
+          <input id="bf-email" name="email" type="email" required autocomplete="email" class="field" aria-describedby="bf-email-error" />
+          <p id="bf-email-error" class="mt-1.5 hidden text-sm text-danger" data-error></p>
+        </div>
+
+        <div>
+          <label for="bf-phone" class="label mb-2 block text-[0.7rem] text-fg">Phone / WhatsApp</label>
+          <input id="bf-phone" name="phone" type="tel" autocomplete="tel" class="field" />
+        </div>
+
+        <div>
+          <label for="bf-type" class="label mb-2 block text-[0.7rem] text-fg">Enquiry type</label>
+          <div class="relative">
+            <select id="bf-type" name="enquiry_type" class="field appearance-none pr-10">
+              {inquiryTypes.map((t) => <option value={t}>{t}</option>)}
+            </select>
+            <svg
+              class="pointer-events-none absolute top-1/2 right-3 size-5 -translate-y-1/2 text-cyan"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"><path d="M7 10l5 5 5-5z"></path></svg
+            >
+          </div>
+        </div>
+
+        <div>
+          <label for="bf-date" class="label mb-2 block text-[0.7rem] text-fg">Event date</label>
+          <input id="bf-date" name="event_date" type="date" class="field [color-scheme:dark]" />
+        </div>
+
+        <div>
+          <label for="bf-location" class="label mb-2 block text-[0.7rem] text-fg">City / Venue</label>
+          <input id="bf-location" name="location" type="text" autocomplete="address-level2" class="field" />
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="bf-message" class="label mb-2 block text-[0.7rem] text-fg">
+            Message <span aria-hidden="true" class="text-amber">*</span>
+          </label>
+          <textarea
+            id="bf-message"
+            name="message"
+            rows="5"
+            required
+            minlength="10"
+            class="field resize-y"
+            placeholder="Tell us about the event, audience, budget and timings."
+            aria-describedby="bf-message-error"></textarea>
+          <p id="bf-message-error" class="mt-1.5 hidden text-sm text-danger" data-error></p>
+        </div>
+
+        <div class="flex flex-col gap-4 sm:col-span-2 sm:flex-row sm:items-center">
+          <button type="submit" class="btn btn-primary w-full disabled:cursor-wait disabled:opacity-70 sm:w-auto" data-submit>
+            <span data-submit-label>Send request</span>
+          </button>
+          <p class="text-sm text-muted">
+            Or email <a href={`mailto:${contact.email}`} class="text-fg underline underline-offset-4 hover:text-amber">{contact.email}</a>
+          </p>
+        </div>
+
+        <div
+          id="booking-status"
+          role="status"
+          aria-live="polite"
+          tabindex="-1"
+          class="hidden border p-4 sm:col-span-2 data-[state=error]:border-danger/60 data-[state=error]:bg-danger/10 data-[state=success]:border-ok/60 data-[state=success]:bg-ok/10"
+        >
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById('booking-form') as HTMLFormElement | null;
+  const status = document.getElementById('booking-status') as HTMLDivElement | null;
+
+  if (form && status) {
+    // Custom inline errors replace native bubbles when JS is available.
+    form.noValidate = true;
+    const submitBtn = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const submitLabel = form.querySelector<HTMLSpanElement>('[data-submit-label]')!;
+
+    const messageFor = (el: HTMLInputElement | HTMLTextAreaElement) => {
+      const v = el.validity;
+      if (v.valueMissing) return 'This field is required.';
+      if (v.typeMismatch && el.type === 'email') return 'Please enter a valid email address.';
+      if (v.tooShort) return `Please enter at least ${el.minLength} characters.`;
+      return 'Please check this field.';
+    };
+
+    const validateField = (el: HTMLInputElement | HTMLTextAreaElement) => {
+      const errorEl = document.getElementById(`${el.id}-error`);
+      if (!errorEl) return true;
+      const ok = el.checkValidity();
+      el.setAttribute('aria-invalid', String(!ok));
+      errorEl.textContent = ok ? '' : messageFor(el);
+      errorEl.classList.toggle('hidden', ok);
+      return ok;
+    };
+
+    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]')];
+    fields.forEach((el) =>
+      el.addEventListener('blur', () => {
+        if (el.value || el.getAttribute('aria-invalid')) validateField(el);
+      }),
+    );
+    fields.forEach((el) =>
+      el.addEventListener('input', () => {
+        if (el.getAttribute('aria-invalid') === 'true') validateField(el);
+      }),
+    );
+
+    const showStatus = (state: 'success' | 'error', html: string) => {
+      status.dataset.state = state;
+      status.innerHTML = html;
+      status.classList.remove('hidden');
+      status.focus();
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const invalid = fields.filter((el) => !validateField(el));
+      if (invalid.length) {
+        invalid[0].focus();
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitLabel.textContent = 'Sending…';
+      status.classList.add('hidden');
+
+      try {
+        const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
+        const res = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body,
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        form.reset();
+        fields.forEach((el) => el.removeAttribute('aria-invalid'));
+        showStatus(
+          'success',
+          '<p class="font-semibold text-ok">Request sent — thank you!</p><p class="mt-1 text-sm text-fg">The LOP3Z team will be in touch soon.</p>',
+        );
+      } catch {
+        const email = form.dataset.email ?? '';
+        showStatus(
+          'error',
+          `<p class="font-semibold text-danger">Sorry, your request couldn’t be sent.</p><p class="mt-1 text-sm text-fg">Please try again, or email <a class="underline underline-offset-4" href="mailto:${email}">${email}</a>.</p>`,
+        );
+      } finally {
+        submitBtn.disabled = false;
+        submitLabel.textContent = 'Send request';
+      }
+    });
+  }
+</script>

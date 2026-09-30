@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Equalizer from '../components/Equalizer.astro';
+---
+
+<BaseLayout title="Page not found — LOP3Z" noindex>
+  <main id="main" class="grid min-h-dvh place-items-center px-4 text-center">
+    <div class="max-w-lg">
+      <p class="section-kicker">Error 404</p>
+      <h1 class="mt-4 text-5xl font-extrabold sm:text-7xl"><span class="name-gradient">Oh my days.</span></h1>
+      <p class="mt-4 text-lg text-muted">This page doesn’t exist, but the music does.</p>
+      <div class="mt-8 flex items-center justify-center gap-4">
+        <Equalizer bars={5} height="20px" />
+        <a href="/" class="btn btn-primary">Back to LOP3Z</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

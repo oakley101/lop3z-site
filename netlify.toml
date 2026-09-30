@@ -1,0 +1,33 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# The original photo kit sits in public/ (so it gets deployed); don't serve its prompt file.
+[[redirects]]
+  from = "/images/lop3z-website-kit/BUILD-PROMPT.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+# Long-lived caching for fingerprinted build assets (JS, CSS, optimized images).
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+
+# Keep the raw source photos out of search results; the site serves optimized copies.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"

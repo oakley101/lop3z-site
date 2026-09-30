@@ -1,0 +1,26 @@
+---
+import { siSpotify, siApplemusic, siAudiomack, siInstagram, siTiktok, siYoutube, siX } from 'simple-icons';
+import type { IconKey } from '../data/site';
+
+interface Props {
+  name: IconKey;
+  class?: string;
+}
+
+const icons = {
+  spotify: siSpotify,
+  applemusic: siApplemusic,
+  audiomack: siAudiomack,
+  instagram: siInstagram,
+  tiktok: siTiktok,
+  youtube: siYoutube,
+  x: siX,
+} as const;
+
+const { name, class: className = 'size-5' } = Astro.props;
+const icon = icons[name];
+---
+
+<svg class={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+  <path d={icon.path} />
+</svg>

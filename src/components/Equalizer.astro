@@ -1,0 +1,14 @@
+---
+// Decorative animated equalizer. Freezes under prefers-reduced-motion (see global.css).
+interface Props {
+  bars?: number;
+  height?: string;
+  width?: string;
+  class?: string;
+}
+const { bars = 5, height = '18px', width = '3px', class: className = '' } = Astro.props;
+---
+
+<span class:list={['eq', className]} style={`--eq-h:${height};--eq-w:${width}`} aria-hidden="true">
+  {Array.from({ length: bars }, () => <span />)}
+</span>

@@ -1,0 +1,81 @@
+LOP3Z WEBSITE — VS CODE BUILD PROMPT
+====================================
+
+HOW TO USE
+1. Create a new empty project folder and open it in VS Code.
+2. Copy the six .jpg files from this zip into:  public/images/
+   (create the public/images/ folders if they don't exist)
+3. Open Claude in VS Code and paste EVERYTHING below the line into the chat.
+4. Claude will build the whole site through all phases without stopping.
+
+Image files included (do not rename):
+  hero.jpg            - hero background portrait
+  about-portrait.jpg  - About section portrait
+  band.jpg            - statement band photo
+  cover-omds.jpg      - OMDs video poster
+  cover-polo.jpg      - POLO video poster
+  cover-mata.jpg      - MATA video poster
+
+=====================  PASTE FROM HERE  =====================
+
+You are a senior front-end engineer. Build a COMPLETE production-ready one-page website for LOP3Z, an Afropop singer/rapper/songwriter — this is the artist's real official site. Run ALL phases below start to finish in one continuous session WITHOUT pausing between them and WITHOUT asking me to confirm. Only stop if you hit an error you genuinely cannot resolve. When finished, run the build, report the result, and give me the deploy steps.
+
+The real image files already exist in /public/images/ — use these exact filenames, do not invent placeholders:
+- hero.jpg            (hero background portrait)
+- about-portrait.jpg  (About section portrait)
+- band.jpg            (statement band photo)
+- cover-omds.jpg      (OMDs video poster)
+- cover-polo.jpg      (POLO video poster)
+- cover-mata.jpg      (MATA video poster)
+Also generate a favicon and an Open Graph share image from cover-omds.jpg.
+
+## Stack
+- Astro + TypeScript + TailwindCSS. Static site, no database. Deploy target: Netlify.
+- Optimize images (AVIF/WebP with fallback via Astro's <Image>), lazy-load them, and use lite-youtube-embed for video (never raw iframes).
+
+## Sections (single scrolling page + sticky nav: Music, Videos, About, Contact)
+1. HERO — name "LOP3Z"; roles "Singer // Rapper // Songwriter"; hero.jpg as full-bleed background with a dark gradient overlay; a "Stream now" button and a "New music out now" badge, both linking to OMDs on Spotify (https://open.spotify.com/track/7g9ydOiV6tTccXO3GE1zqJ).
+2. MUSIC — 4 singles, each linking to its Spotify track; embed the Spotify player for OMDs:
+   - OMDs:  https://open.spotify.com/track/7g9ydOiV6tTccXO3GE1zqJ
+   - POLO:  https://open.spotify.com/track/2MoA5nk5HqjaVn0eWDDswQ
+   - MATA:  https://open.spotify.com/track/39G3YUemFEYWVJgik9xa3O
+   - PAY ME: https://open.spotify.com/track/5b3h1PAF103cjujbtPPGBJ
+3. STATEMENT BAND — band.jpg full-width with the line: "Shake off the negativity. Take control of your happiness."
+4. VIDEOS — 3 lite-youtube-embed players, each using its cover image as the poster:
+   - OMDS (cover-omds.jpg): https://youtu.be/1d4_FHZ8UYM
+   - POLO (cover-polo.jpg): https://youtu.be/fzYF8tLOEkY
+   - MATA (cover-mata.jpg): https://youtu.be/euzFWpzff5M
+5. ABOUT — two columns: about-portrait.jpg + bio: "LOP3Z makes Afropop for survivors who choose joy. Her new single 'OMDs' (Oh My Days) is a mid-tempo, feel-good record about shaking off negativity and taking control of your happiness. Produced by Rhaffy."
+6. CONTACT & BOOKINGS — booking email vibezbylop3z@gmail.com, phone/WhatsApp +2347045907209, management "Neon Records Entertainment". Booking form submitting via Netlify Forms (honeypot + success/error states, no backend server).
+7. FOOTER — socials + copyright.
+
+## Streaming & socials (use exactly, and in JSON-LD sameAs)
+- Spotify artist: https://open.spotify.com/artist/6TEycOYjOevjKnp5WN1UjI
+- Apple Music: https://music.apple.com/us/artist/lop3z/1801808605
+- Audiomack: https://audiomack.com/vibez-lop3z
+- Instagram: https://instagram.com/vibezbylop3z
+- TikTok: https://www.tiktok.com/@vibezbylop3z
+- YouTube: https://www.youtube.com/@vibezbylop3z
+- X: https://x.com/vibezbylop3z
+
+## Design
+Futuristic dark aesthetic: near-black base, electric cyan + amber accents, animated name gradient, subtle background grid/glow, a live equalizer animation, tasteful hover motion. Fonts: Sora (display), Chakra Petch (labels), Space Mono (mono). Mobile-first; respect prefers-reduced-motion.
+
+## Production essentials (all required)
+- SEO: title, meta description, Open Graph + Twitter card tags with the share image, favicon, sitemap.xml, robots.txt.
+- JSON-LD MusicGroup for LOP3Z with sameAs linking every social/streaming URL above.
+- Accessibility: WCAG AA contrast, alt text on every image, keyboard nav, visible focus, ARIA on the form.
+- Performance: target Lighthouse 90+ mobile — optimized images, no layout shift, lazy-loaded embeds.
+- Privacy-friendly analytics (Plausible) via one script tag behind an env var so it can be disabled.
+
+## Deliverables
+- Complete Astro project + README (local dev, build, deploy to Netlify, and where to swap images/links/text).
+- .gitignore and netlify.toml.
+- Do NOT overwrite the existing files in /public/images/.
+
+## Order of work (do all of these without stopping)
+1) Scaffold Astro + Tailwind + tooling + hero.
+2) Music + videos (lite-youtube-embed) + statement band.
+3) About + Netlify contact form + footer.
+4) SEO, JSON-LD, analytics, accessibility + performance pass, README, netlify.toml.
+Then run `npm run build`, report any issues you fixed, and print the deploy steps.
