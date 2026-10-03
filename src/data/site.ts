@@ -105,6 +105,13 @@ export const videos: Video[] = [
     poster: coverMata,
     posterAlt: 'MATA cover art',
   },
+  {
+    title: 'PAY ME',
+    youtubeId: '9N7cF4KW5JA',
+    url: 'https://youtu.be/9N7cF4KW5JA',
+    poster: coverPayme,
+    posterAlt: 'PAY ME cover art',
+  },
 ];
 
 export const contact = {

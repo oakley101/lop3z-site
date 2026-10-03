@@ -5,6 +5,14 @@ import { videos, socials } from '../data/site';
 import Icon from './Icon.astro';
 
 const youtube = socials.find((s) => s.icon === 'youtube');
+
+// The first video is the big one; the rest stack in a column beside it.
+// Full class names so Tailwind picks them up.
+const stacked = {
+  2: { grid: 'lg:grid-rows-2', feature: 'lg:row-span-2' },
+  3: { grid: 'lg:grid-rows-3', feature: 'lg:row-span-3' },
+  4: { grid: 'lg:grid-rows-4', feature: 'lg:row-span-4' },
+}[Math.min(Math.max(videos.length - 1, 2), 4) as 2 | 3 | 4];
 ---
 
 <section id="videos" aria-labelledby="videos-title" class="relative py-24 sm:py-32">
@@ -25,11 +33,11 @@ const youtube = socials.find((s) => s.icon === 'youtube');
       }
     </div>
 
-    <ul class="mt-12 grid gap-6 lg:grid-cols-3 lg:grid-rows-2">
+    <ul class:list={['mt-12 grid gap-6 lg:grid-cols-3', stacked.grid]}>
       {
         videos.map((video, i) => (
           <li
-            class:list={['reveal', i === 0 && 'lg:col-span-2 lg:row-span-2']}
+            class:list={['reveal', i === 0 && ['lg:col-span-2', stacked.feature]]}
             style={`transition-delay:${i * 100}ms`}
           >
             <article class="card group flex h-full flex-col p-2.5 sm:p-3">
