@@ -7,33 +7,46 @@ import coverOmds from '../assets/images/cover-omds.jpg';
 import coverPolo from '../assets/images/cover-polo.jpg';
 import coverMata from '../assets/images/cover-mata.jpg';
 import coverPayme from '../assets/images/cover-payme.jpg';
+import coverSkelewu from '../assets/images/cover-skelewu.jpg';
 
 export const artist = {
   name: 'LOP3Z',
   roles: ['Singer', 'Rapper', 'Songwriter'],
   genre: 'Afropop',
-  tagline: 'Afropop for survivors who choose joy.',
-  statement: 'Shake off the negativity. Take control of your happiness.',
+  tagline: 'Afropop with bars, bounce and zero bad energy.',
+  statement: 'Leave the bad vibes at the door. Turn it all the way up.',
   bio: [
-    'LOP3Z makes Afropop for survivors who choose joy.',
-    "Her new single ‘OMDs’ (Oh My Days) is a mid-tempo, feel-good record about shaking off negativity and taking control of your happiness. Produced by Rhaffy.",
+    'LOP3Z sings, raps and writes her own records: Afropop that hits like a party and sticks like a hook.',
+    'Every release is its own world. The feel-good bounce of ‘OMDs’ (Oh My Days, prod. Rhaffy). The swagger of ‘POLO’ with Konga & Bfrans. The courtroom drama of ‘MATA’. The boss energy of ‘PAY ME’.',
+    'Next up: ‘Skelewu’. Dance-floor ready, out everywhere 23 October 2026.',
   ],
+  handle: '@vibezbylop3z',
+  spotifyArtist: 'https://open.spotify.com/artist/6TEycOYjOevjKnp5WN1UjI',
+};
+
+// ─── Upcoming release ────────────────────────────────────────
+//  The teaser + countdown switch to "Out now" automatically once
+//  `releaseAt` passes. Add the Spotify link (and pre-save link, if
+//  the distributor gives one) here when they exist.
+export const upcoming = {
+  title: 'Skelewu',
+  releaseAt: '2026-10-23T00:00:00+01:00', // midnight, Lagos time (WAT)
+  releaseLabel: 'Friday 23 October 2026',
+  cover: coverSkelewu,
+  coverAlt:
+    'Skelewu cover art: illustrated LOP3Z in a white suit and blue sunglasses DJing at a party, with dancers on either side and a crowd behind.',
+  presave: '' as string, // e.g. a pre-save link from the distributor
+  spotify: '' as string, // Spotify track link, once it's live
 };
 
 export const seo = {
-  title: 'LOP3Z — Singer // Rapper // Songwriter | New single “OMDs” out now',
+  title: 'LOP3Z — Singer // Rapper // Songwriter | New single “Skelewu” out 23 October',
   description:
-    'Official site of LOP3Z, Afropop singer, rapper and songwriter. Stream the new single “OMDs” (Oh My Days), watch the videos, and book LOP3Z for shows.',
+    'Official site of LOP3Z, Afropop singer, rapper and songwriter. New single “Skelewu” drops 23 October 2026. Stream OMDs, POLO, MATA and PAY ME, watch the videos, and book LOP3Z for shows.',
   ogImage: '/og-image.jpg',
-  ogImageAlt: 'LOP3Z — new single “OMDs” out now. Cover art shows LOP3Z on a swing against a lilac sky.',
+  ogImageAlt: 'LOP3Z — new single “Skelewu” out 23 October 2026. Cover art shows LOP3Z DJing at a party in a white suit.',
   twitterHandle: '@vibezbylop3z',
   locale: 'en_NG',
-};
-
-export const featured = {
-  title: 'OMDs',
-  spotify: 'https://open.spotify.com/track/7g9ydOiV6tTccXO3GE1zqJ',
-  spotifyEmbed: 'https://open.spotify.com/embed/track/7g9ydOiV6tTccXO3GE1zqJ?utm_source=generator&theme=0',
 };
 
 export interface Single {
@@ -47,7 +60,7 @@ export interface Single {
 export const singles: Single[] = [
   {
     title: 'OMDs',
-    subtitle: 'Oh My Days · New single',
+    subtitle: 'Oh My Days · prod. Rhaffy',
     spotify: 'https://open.spotify.com/track/7g9ydOiV6tTccXO3GE1zqJ',
     cover: coverOmds,
     coverAlt: 'OMDs cover art: LOP3Z on a rope swing, seen from behind, against a lilac sky with birds.',
@@ -121,6 +134,7 @@ export interface Profile {
   label: string;
   url: string;
   icon: IconKey;
+  cta?: string;
 }
 
 export const streaming: Profile[] = [
@@ -130,15 +144,18 @@ export const streaming: Profile[] = [
 ];
 
 export const socials: Profile[] = [
-  { label: 'Instagram', url: 'https://instagram.com/vibezbylop3z', icon: 'instagram' },
-  { label: 'TikTok', url: 'https://www.tiktok.com/@vibezbylop3z', icon: 'tiktok' },
-  { label: 'YouTube', url: 'https://www.youtube.com/@vibezbylop3z', icon: 'youtube' },
-  { label: 'X', url: 'https://x.com/vibezbylop3z', icon: 'x' },
+  { label: 'Instagram', url: 'https://instagram.com/vibezbylop3z', icon: 'instagram', cta: 'Photos, stories & behind the scenes' },
+  { label: 'TikTok', url: 'https://www.tiktok.com/@vibezbylop3z', icon: 'tiktok', cta: 'Dance it, duet it, use the sound' },
+  { label: 'YouTube', url: 'https://www.youtube.com/@vibezbylop3z', icon: 'youtube', cta: 'Official videos & visualizers' },
+  { label: 'X', url: 'https://x.com/vibezbylop3z', icon: 'x', cta: 'Talk to LOP3Z directly' },
 ];
 
 export const nav = [
   { label: 'Music', href: '#music' },
   { label: 'Videos', href: '#videos' },
   { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Booking', href: '#contact' },
 ];
+
+/** Spotify track ID from an open.spotify.com/track/… link. */
+export const spotifyId = (url: string) => url.split('/track/')[1]?.split('?')[0] ?? '';

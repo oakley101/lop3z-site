@@ -1,7 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import 'lite-youtube-embed/src/lite-yt-embed.css';
-import { videos, socials } from '../data/site';
+import { videos, socials, upcoming } from '../data/site';
 import Icon from './Icon.astro';
 
 const youtube = socials.find((s) => s.icon === 'youtube');
@@ -12,7 +12,7 @@ const youtube = socials.find((s) => s.icon === 'youtube');
     <div class="reveal flex flex-wrap items-end justify-between gap-6">
       <div>
         <p class="section-kicker">02 // Videos</p>
-        <h2 id="videos-title" class="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">Watch</h2>
+        <h2 id="videos-title" class="mt-3 text-5xl font-extrabold tracking-tight sm:text-7xl">Lights. Camera. LOP3Z.</h2>
       </div>
       {
         youtube && (
@@ -25,20 +25,18 @@ const youtube = socials.find((s) => s.icon === 'youtube');
       }
     </div>
 
-    <ul class="mt-12 grid gap-6 lg:grid-cols-3 lg:grid-rows-2">
-      {
-        videos.map((video, i) => (
-          <li
-            class:list={['reveal', i === 0 && 'lg:col-span-2 lg:row-span-2']}
-            style={`transition-delay:${i * 100}ms`}
-          >
-            <article class="card group flex h-full flex-col p-2.5 sm:p-3">
+    <div class="reveal mt-12 grid gap-6 lg:grid-cols-[1fr_17rem]">
+      <!-- Screen -->
+      <div class="card p-2.5 sm:p-3" id="video-screen">
+        {
+          videos.map((video, i) => (
+            <div id={`video-panel-${i}`} role="tabpanel" aria-labelledby={`video-tab-${i}`} hidden={i !== 0} data-panel>
               <lite-youtube
                 videoid={video.youtubeId}
                 title={`${video.title} — LOP3Z (official video)`}
                 params="rel=0&modestbranding=1"
                 style="background-image: linear-gradient(#0b0e16, #0b0e16)"
-                class:list={['overflow-hidden', i === 0 && 'lg:flex-1']}
+                class="overflow-hidden"
               >
                 <Picture
                   src={video.poster}
@@ -54,7 +52,7 @@ const youtube = socials.find((s) => s.icon === 'youtube');
                   src={video.poster}
                   formats={['avif', 'webp']}
                   widths={[360, 540, 800]}
-                  sizes={i === 0 ? '(min-width: 1024px) 50vw, 90vw' : '(min-width: 1024px) 25vw, 90vw'}
+                  sizes="(min-width: 1024px) 60vw, 90vw"
                   alt={`${video.posterAlt} — video poster`}
                   loading="lazy"
                   decoding="async"
@@ -65,10 +63,7 @@ const youtube = socials.find((s) => s.icon === 'youtube');
                 </button>
               </lite-youtube>
               <div class="flex items-center justify-between gap-3 px-1 pt-3 pb-1">
-                <h3 class="flex items-center gap-3 text-lg font-bold sm:text-xl">
-                  <span class="font-mono text-xs text-cyan">{String(i + 1).padStart(2, '0')}</span>
-                  {video.title}
-                </h3>
+                <h3 class="text-xl font-bold sm:text-2xl">{video.title} <span class="font-mono text-xs font-normal text-muted">Official video</span></h3>
                 <a
                   href={video.url}
                   target="_blank"
@@ -78,14 +73,71 @@ const youtube = socials.find((s) => s.icon === 'youtube');
                   YouTube ↗<span class="sr-only"> — watch {video.title} on YouTube (opens in a new tab)</span>
                 </a>
               </div>
-            </article>
-          </li>
-        ))
-      }
-    </ul>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Channel list -->
+      <div>
+        <div role="tablist" aria-label="Choose a video" aria-orientation="vertical" class="grid gap-2 sm:grid-cols-3 lg:grid-cols-1">
+          {
+            videos.map((video, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`video-tab-${i}`}
+                aria-controls={`video-panel-${i}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                class="video-tab"
+              >
+                <span class="font-mono text-xs text-cyan">{String(i + 1).padStart(2, '0')}</span>
+                <span class="flex-1 text-left text-lg font-bold">{video.title}</span>
+                <span class="video-tab-live label text-[0.6rem]" aria-hidden="true">On screen</span>
+              </button>
+            ))
+          }
+          <div class="video-tab pointer-events-none !border-dashed opacity-80" aria-hidden="true">
+            <span class="font-mono text-xs text-gold">{String(videos.length + 1).padStart(2, '0')}</span>
+            <span class="flex-1 text-left text-lg font-bold">{upcoming.title}</span>
+            <span class="label text-[0.6rem] text-gold">Soon</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
   import 'lite-youtube-embed';
+
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('#videos [role=tab]')];
+  const panels = [...document.querySelectorAll<HTMLElement>('#videos [data-panel]')];
+  // Keep pristine copies so switching away from a playing video stops it.
+  const pristine = panels.map((p) => p.querySelector('lite-youtube')!.cloneNode(true) as HTMLElement);
+
+  const select = (i: number, focus = false) => {
+    tabs.forEach((t, j) => {
+      const on = i === j;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      const panel = panels[j];
+      if (!on && !panel.hidden) {
+        panel.querySelector('lite-youtube')?.replaceWith(pristine[j].cloneNode(true));
+      }
+      panel.hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+  };
+
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(i));
+    t.addEventListener('keydown', (e) => {
+      const next = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      select((i + next + tabs.length) % tabs.length, true);
+    });
+  });
 </script>

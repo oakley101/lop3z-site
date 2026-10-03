@@ -1,0 +1,83 @@
+---
+// Live countdown to the upcoming release. Renders the server-side value at build
+// time and ticks in the browser. Once the date passes, every element marked
+// [data-before-release] hides and every [data-after-release] shows.
+import { upcoming } from '../data/site';
+
+interface Props {
+  variant?: 'full' | 'compact';
+  class?: string;
+}
+const { variant = 'full', class: className = '' } = Astro.props;
+const units = [
+  { key: 'd', label: 'Days' },
+  { key: 'h', label: 'Hours' },
+  { key: 'm', label: 'Mins' },
+  { key: 's', label: 'Secs' },
+] as const;
+---
+
+{
+  variant === 'full' ? (
+    <div
+      class:list={['grid grid-cols-4 gap-2 sm:gap-3', className]}
+      data-countdown={upcoming.releaseAt}
+      data-before-release
+      role="timer"
+      aria-label={`Countdown to “${upcoming.title}”, out ${upcoming.releaseLabel}`}
+    >
+      {units.map((u) => (
+        <div class="countdown-cell">
+          <span class="block font-display text-3xl font-extrabold tabular-nums sm:text-5xl" data-unit={u.key}>
+            --
+          </span>
+          <span class="label mt-1 block text-[0.62rem] text-muted sm:text-[0.68rem]">{u.label}</span>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <span
+      class:list={['font-mono tabular-nums', className]}
+      data-countdown={upcoming.releaseAt}
+      data-before-release
+      aria-hidden="true"
+    >
+      <span data-unit="d">--</span>d <span data-unit="h">--</span>h <span data-unit="m">--</span>m
+      <span data-unit="s">--</span>s
+    </span>
+  )
+}
+
+<script>
+  const els = document.querySelectorAll<HTMLElement>('[data-countdown]');
+  const target = els[0] ? Date.parse(els[0].dataset.countdown!) : NaN;
+
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const tick = () => {
+    const diff = target - Date.now();
+    if (!(diff > 0)) {
+      document.documentElement.classList.add('is-released');
+      return false;
+    }
+    const s = Math.floor(diff / 1000);
+    const parts: Record<string, string> = {
+      d: String(Math.floor(s / 86400)),
+      h: pad(Math.floor((s % 86400) / 3600)),
+      m: pad(Math.floor((s % 3600) / 60)),
+      s: pad(s % 60),
+    };
+    els.forEach((el) =>
+      el.querySelectorAll<HTMLElement>('[data-unit]').forEach((u) => {
+        const v = parts[u.dataset.unit!];
+        if (u.textContent !== v) u.textContent = v;
+      }),
+    );
+    return true;
+  };
+
+  if (!Number.isNaN(target) && tick()) {
+    const id = setInterval(() => {
+      if (!tick()) clearInterval(id);
+    }, 1000);
+  }
+</script>

@@ -1,5 +1,5 @@
 ---
-import { nav, artist } from '../data/site';
+import { nav, artist, upcoming } from '../data/site';
 import Equalizer from './Equalizer.astro';
 ---
 
@@ -37,6 +37,14 @@ import Equalizer from './Equalizer.astro';
         ))
       }
     </ul>
+    <a
+      href="#skelewu"
+      class="label hidden items-center gap-2 border border-gold/50 px-3 py-1.5 text-[0.65rem] text-gold transition-colors hover:bg-gold hover:text-ink md:inline-flex"
+    >
+      <span class="inline-block size-1.5 rounded-full bg-current" aria-hidden="true"></span>
+      {upcoming.title}
+      <span data-before-release>· 23.10</span><span data-after-release>· Out now</span>
+    </a>
   </nav>
 </header>
 
