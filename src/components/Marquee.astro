@@ -1,0 +1,29 @@
+---
+// Scrolling ticker between sections. Purely decorative: the same words appear as
+// real content elsewhere on the page, so it is hidden from assistive tech.
+import { singles, upcoming } from '../data/site';
+
+const words = [
+  `${upcoming.title} 23.10.26`,
+  ...singles.map((s) => s.title),
+  'Vibez by LOP3Z',
+  'Singer // Rapper // Songwriter',
+];
+---
+
+<div class="marquee relative z-10 -my-px overflow-hidden border-y border-gold/30 bg-gold py-3 text-ink" aria-hidden="true">
+  <div class="marquee-track flex w-max">
+    {
+      [0, 1].map(() => (
+        <ul class="flex shrink-0 items-center">
+          {words.map((w) => (
+            <li class="flex items-center font-display text-lg font-extrabold tracking-tight whitespace-nowrap uppercase sm:text-2xl">
+              <span class="px-6">{w}</span>
+              <span class="text-base">✦</span>
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>

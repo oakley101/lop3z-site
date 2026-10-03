@@ -1,9 +1,9 @@
 ---
 import { Picture } from 'astro:assets';
 import heroImg from '../assets/images/hero.jpg';
-import { artist, featured, streaming } from '../data/site';
+import { artist, upcoming } from '../data/site';
+import Countdown from './Countdown.astro';
 import Equalizer from './Equalizer.astro';
-import Icon from './Icon.astro';
 ---
 
 <section id="top" class="relative isolate flex min-h-[100svh] items-end overflow-hidden pt-24 pb-16 sm:pb-20 lg:items-center">
@@ -34,16 +34,15 @@ import Icon from './Icon.astro';
   <div class="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl">
       <a
-        href={featured.spotify}
-        target="_blank"
-        rel="noopener"
-        class="group mb-6 inline-flex items-center gap-3 border border-cyan/40 bg-ink/60 py-1.5 pr-4 pl-2 backdrop-blur-sm transition-colors hover:border-cyan"
+        href="#skelewu"
+        class="group mb-6 inline-flex items-center gap-3 border border-gold/40 bg-ink/60 py-1.5 pr-4 pl-2 backdrop-blur-sm transition-colors hover:border-gold"
       >
-        <span class="inline-block size-2 rounded-full bg-cyan animate-pulse-dot" aria-hidden="true"></span>
-        <span class="label text-[0.7rem] text-fg">New music out now</span>
-        <span class="font-mono text-xs text-amber">“{featured.title}”</span>
-        <span aria-hidden="true" class="text-cyan transition-transform group-hover:translate-x-1">→</span>
-        <span class="sr-only">(opens Spotify in a new tab)</span>
+        <span class="inline-block size-2 rounded-full bg-gold animate-pulse-dot" aria-hidden="true"></span>
+        <span class="label text-[0.7rem] text-fg">
+          <span data-before-release>New single 23.10</span><span data-after-release>New single out now</span>
+        </span>
+        <span class="font-mono text-xs text-gold">“{upcoming.title}”</span>
+        <span aria-hidden="true" class="text-gold transition-transform group-hover:translate-x-1">→</span>
       </a>
 
       <h1 class="font-display text-[clamp(4.5rem,20vw,11rem)] leading-[0.85] font-extrabold tracking-[-0.02em]">
@@ -68,36 +67,44 @@ import Icon from './Icon.astro';
       <p class="mt-5 max-w-md text-lg text-muted sm:text-xl">{artist.tagline}</p>
 
       <div class="mt-9 flex flex-wrap items-center gap-4">
-        <a href={featured.spotify} target="_blank" rel="noopener" class="btn btn-primary">
+        <a href={artist.spotifyArtist} target="_blank" rel="noopener" class="btn btn-primary">
           <Equalizer bars={4} height="14px" class="[--color-cyan:var(--color-ink)] [--color-amber:var(--color-ink)]" />
-          Stream now
-          <span class="sr-only">— “{featured.title}” on Spotify (opens in a new tab)</span>
+          Listen now
+          <span class="sr-only">— LOP3Z on Spotify (opens in a new tab)</span>
         </a>
         <a href="#videos" class="btn btn-ghost">Watch videos</a>
       </div>
 
-      <ul class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3" aria-label="Listen on">
-        {
-          streaming.map((s) => (
-            <li>
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noopener"
-                class="flex items-center gap-2 text-muted transition-colors hover:text-cyan"
-              >
-                <Icon name={s.icon} class="size-5" />
-                <span class="label text-[0.68rem]">{s.label}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
+      <!-- Next-drop teaser -->
+      <a
+        href="#skelewu"
+        class="group mt-10 flex max-w-sm items-center gap-4 border border-line bg-ink/70 p-2.5 pr-5 backdrop-blur-md transition-colors hover:border-gold/70"
+      >
+        <Picture
+          src={upcoming.cover}
+          formats={['avif', 'webp']}
+          widths={[72, 144]}
+          sizes="72px"
+          alt=""
+          loading="eager"
+          class="size-[72px] object-cover"
+          pictureAttributes={{ class: 'block size-[72px] shrink-0 overflow-hidden' }}
+        />
+        <span class="min-w-0 flex-1">
+          <span class="label block text-[0.62rem] text-gold">
+            <span data-before-release>Next drop</span><span data-after-release>Out now</span>
+          </span>
+          <span class="block text-xl font-extrabold">{upcoming.title}</span>
+          <Countdown variant="compact" class="block text-xs text-muted" />
+          <span class="block font-mono text-xs text-muted" data-after-release>Stream it everywhere</span>
+        </span>
+        <span aria-hidden="true" class="text-gold transition-transform group-hover:translate-x-1">→</span>
+      </a>
     </div>
   </div>
 
   <a
-    href="#music"
+    href="#skelewu"
     class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted transition-colors hover:text-cyan sm:flex"
   >
     <span class="label text-[0.65rem]">Scroll</span>

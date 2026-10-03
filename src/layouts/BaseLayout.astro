@@ -6,7 +6,7 @@ import '@fontsource/space-mono/400.css';
 import '@fontsource/space-mono/700.css';
 import soraLatin from '@fontsource-variable/sora/files/sora-latin-wght-normal.woff2?url';
 import '../styles/global.css';
-import { artist, seo, streaming, socials, singles, contact } from '../data/site';
+import { artist, seo, streaming, socials, singles, contact, upcoming } from '../data/site';
 
 interface Props {
   title?: string;
@@ -34,17 +34,29 @@ const jsonLd = {
   sameAs: [...streaming, ...socials].map((p) => p.url),
   email: `mailto:${contact.email}`,
   telephone: contact.phone,
-  track: singles.map((s) => ({
-    '@type': 'MusicRecording',
-    name: s.title,
-    url: s.spotify,
-    byArtist: { '@id': new URL('/#artist', Astro.site).href },
-  })),
+  track: [
+    ...singles.map((s) => ({
+      '@type': 'MusicRecording',
+      name: s.title,
+      url: s.spotify,
+      byArtist: { '@id': new URL('/#artist', Astro.site).href },
+    })),
+    {
+      '@type': 'MusicRecording',
+      name: upcoming.title,
+      datePublished: upcoming.releaseAt.slice(0, 10),
+      url: upcoming.spotify || new URL('/#skelewu', Astro.site).href,
+      byArtist: { '@id': new URL('/#artist', Astro.site).href },
+    },
+  ],
 };
+
+// Build-time release state; the inline script below re-checks it in the browser.
+const released = Date.now() >= Date.parse(upcoming.releaseAt);
 ---
 
 <!doctype html>
-<html lang="en" class="bg-ink">
+<html lang="en" class:list={['bg-ink', released && 'is-released']}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -86,6 +98,9 @@ const jsonLd = {
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline define:vars={{ releaseAt: upcoming.releaseAt }}>
+      if (Date.now() >= Date.parse(releaseAt)) document.documentElement.classList.add('is-released');
+    </script>
 
     {
       plausibleDomain && (

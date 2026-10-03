@@ -20,6 +20,7 @@ const CROPS = {
   'hero.jpg': null,
   'band.jpg': null,
   'cover-omds.jpg': null,
+  'cover-skelewu.jpg': null,
   // Screenshot: grey "Files" app frame around the photo.
   'about-portrait.jpg': [42 / 968, 78 / 1280, 928 / 968, 1188 / 1280],
   // Screenshot: dark border + bottom bar.
@@ -112,15 +113,16 @@ console.log('✓ favicons');
 
 // ---------- Open Graph image 1200×630 ----------
 // Blurred, darkened cover fills the frame; the sharp square cover sits on the right,
-// with the name + single title on the left.
+// with the name + single title on the left. Uses the upcoming single's cover.
+const ogCover = `${OUT_DIR}/cover-skelewu.jpg`;
 const W = 1200;
 const H = 630;
-const bg = await sharp(cover)
+const bg = await sharp(ogCover)
   .resize(W, H, { fit: 'cover' })
   .blur(40)
   .modulate({ brightness: 0.35, saturation: 1.2 })
   .toBuffer();
-const art = await sharp(cover).resize(510, 510).toBuffer();
+const art = await sharp(ogCover).resize(510, 510).toBuffer();
 const overlay = Buffer.from(`
 <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -133,8 +135,8 @@ const overlay = Buffer.from(`
   <rect x="628" y="58" width="514" height="514" fill="none" stroke="url(#g)" stroke-width="4"/>
   <text x="70" y="250" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="132" fill="url(#g)" letter-spacing="4">LOP3Z</text>
   <text x="74" y="310" font-family="Courier New, monospace" font-size="21" fill="#e8edf5" letter-spacing="2">SINGER // RAPPER // SONGWRITER</text>
-  <text x="74" y="420" font-family="Arial, sans-serif" font-weight="700" font-size="40" fill="#ffffff">New single “OMDs”</text>
-  <text x="74" y="468" font-family="Arial, sans-serif" font-size="28" fill="#c9d3e0">Out now on all platforms</text>
+  <text x="74" y="420" font-family="Arial, sans-serif" font-weight="700" font-size="40" fill="#ffffff">New single “Skelewu”</text>
+  <text x="74" y="468" font-family="Arial, sans-serif" font-size="28" fill="#c9d3e0">Out 23 October 2026</text>
 </svg>`);
 await sharp(bg)
   .composite([

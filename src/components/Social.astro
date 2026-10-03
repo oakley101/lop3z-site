@@ -1,0 +1,83 @@
+---
+import { Picture } from 'astro:assets';
+import bandImg from '../assets/images/band.jpg';
+import { artist, socials, upcoming } from '../data/site';
+import Icon from './Icon.astro';
+import Share from './Share.astro';
+
+const brand: Record<string, string> = {
+  instagram: '#ff4f8b',
+  tiktok: '#25f4ee',
+  youtube: '#ff3b3b',
+  x: '#eef2f8',
+};
+---
+
+<section id="follow" aria-labelledby="follow-title" class="relative overflow-hidden border-y border-line bg-ink-2/60 py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="reveal grid items-end gap-8 lg:grid-cols-[1fr_auto]">
+      <div>
+        <p class="section-kicker">04 // Community</p>
+        <h2 id="follow-title" class="mt-3 text-5xl font-extrabold tracking-tight sm:text-7xl">
+          Tap in. <span class="text-muted">Stay locked.</span>
+        </h2>
+        <p class="mt-5 max-w-xl text-lg text-muted">
+          Behind the scenes, first listens and the <span class="text-gold">{upcoming.title}</span> rollout happen here first. One handle everywhere:
+        </p>
+      </div>
+      <p class="font-mono text-2xl tracking-tight text-fg sm:text-4xl">
+        <span class="name-gradient">{artist.handle}</span>
+      </p>
+    </div>
+
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        socials.map((s, i) => (
+          <li class="reveal" style={`transition-delay:${i * 80}ms`}>
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener me"
+              class="social-card group"
+              style={`--brand:${brand[s.icon] ?? 'var(--color-cyan)'}`}
+            >
+              <span class="flex items-start justify-between">
+                <Icon name={s.icon} class="size-8 text-fg transition-colors group-hover:text-[var(--brand)]" />
+                <span class="label text-[0.62rem] text-muted transition-colors group-hover:text-[var(--brand)]">Follow ↗</span>
+              </span>
+              <span class="mt-10 block text-2xl font-extrabold">{s.label}</span>
+              <span class="mt-1 block font-mono text-xs text-muted">{artist.handle}</span>
+              {s.cta && <span class="mt-4 block text-sm text-fg/80">{s.cta}</span>}
+              <span class="sr-only">(opens in a new tab)</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- Share strip -->
+    <div class="reveal relative isolate mt-12 overflow-hidden border border-line">
+      <div class="absolute inset-0 -z-10">
+        <Picture
+          src={bandImg}
+          formats={['avif', 'webp']}
+          widths={[640, 1024]}
+          sizes="100vw"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover object-[50%_30%] opacity-30 blur-[2px]"
+          pictureAttributes={{ class: 'block h-full w-full' }}
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/60"></div>
+      </div>
+      <div class="flex flex-col gap-6 p-6 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p class="text-2xl font-extrabold sm:text-3xl">Know someone who needs this playlist?</p>
+          <p class="mt-2 text-muted">Send them the site. It takes two seconds.</p>
+        </div>
+        <Share text={`You need to hear ${artist.name} 🔥`} />
+      </div>
+    </div>
+  </div>
+</section>

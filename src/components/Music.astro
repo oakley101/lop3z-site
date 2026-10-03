@@ -1,8 +1,11 @@
 ---
 import { Picture } from 'astro:assets';
-import { featured, singles, streaming } from '../data/site';
+import { singles, spotifyId, streaming, upcoming } from '../data/site';
 import Equalizer from './Equalizer.astro';
 import Icon from './Icon.astro';
+
+const embed = (url: string) => `https://open.spotify.com/embed/track/${spotifyId(url)}?utm_source=generator&theme=0`;
+const first = singles[0];
 ---
 
 <section id="music" aria-labelledby="music-title" class="relative py-24 sm:py-32">
@@ -10,7 +13,7 @@ import Icon from './Icon.astro';
     <div class="reveal flex flex-wrap items-end justify-between gap-6">
       <div>
         <p class="section-kicker">01 // Music</p>
-        <h2 id="music-title" class="mt-3 text-4xl font-bold tracking-tight sm:text-6xl">Singles</h2>
+        <h2 id="music-title" class="mt-3 text-5xl font-extrabold tracking-tight sm:text-7xl">Press play.</h2>
       </div>
       <ul class="flex flex-wrap gap-3" aria-label="Follow LOP3Z on streaming platforms">
         {
@@ -27,105 +30,119 @@ import Icon from './Icon.astro';
       </ul>
     </div>
 
-    <!-- Featured player -->
-    <div class="reveal card mt-12 p-4 sm:p-6">
-      <div class="mb-4 flex items-center justify-between gap-4">
-        <p class="flex items-center gap-3">
-          <Equalizer bars={5} height="16px" />
-          <span class="label text-xs text-fg">Now playing — “{featured.title}”</span>
-        </p>
-        <span class="hidden font-mono text-xs text-muted sm:inline">Prod. Rhaffy</span>
-      </div>
-      <!-- Player loads only when scrolled near (keeps Spotify's scripts and cookies off the initial load). -->
-      <div class="h-[152px] overflow-hidden rounded-xl bg-ink-2">
-        <iframe
-          id="spotify-player"
-          title={`Spotify player: ${featured.title} by LOP3Z`}
-          data-src={featured.spotifyEmbed}
-          width="100%"
-          height="152"
-          loading="lazy"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          class="block border-0"></iframe>
-        <noscript>
+    <div class="mt-12 grid gap-6 lg:grid-cols-[7fr_5fr] lg:gap-8">
+      <!-- Player -->
+      <div class="reveal card p-3 sm:p-4">
+        <div class="mb-3 flex items-center justify-between gap-4 px-1">
+          <p class="flex items-center gap-3">
+            <Equalizer bars={5} height="16px" />
+            <span class="label text-xs text-fg">Now playing — “<span id="now-playing">{first.title}</span>”</span>
+          </p>
+          <span class="hidden font-mono text-xs text-muted sm:inline">Spotify</span>
+        </div>
+        <!-- Player loads only when scrolled near (keeps Spotify's scripts and cookies off the initial load). -->
+        <div class="h-[352px] overflow-hidden rounded-xl bg-ink-2">
           <iframe
-            title={`Spotify player: ${featured.title} by LOP3Z`}
-            src={featured.spotifyEmbed}
+            id="spotify-player"
+            title={`Spotify player: ${first.title} by LOP3Z`}
+            data-src={embed(first.spotify)}
             width="100%"
-            height="152"
+            height="352"
             loading="lazy"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             class="block border-0"></iframe>
-        </noscript>
+          <noscript>
+            <iframe
+              title={`Spotify player: ${first.title} by LOP3Z`}
+              src={embed(first.spotify)}
+              width="100%"
+              height="352"
+              loading="lazy"
+              class="block border-0"></iframe>
+          </noscript>
+        </div>
       </div>
-    </div>
 
-    <!-- Singles grid -->
-    <ul class="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-      {
-        singles.map((single, i) => (
-          <li class="reveal" style={`transition-delay:${i * 80}ms`}>
-            <a
-              href={single.spotify}
-              target="_blank"
-              rel="noopener"
-              class="card group block h-full p-2.5 hover:-translate-y-1 sm:p-3"
-            >
-              <div class="relative aspect-square overflow-hidden bg-ink-2">
-                {single.cover ? (
-                  <Picture
-                    src={single.cover}
-                    formats={['avif', 'webp']}
-                    widths={[240, 400, 600]}
-                    sizes="(min-width: 1024px) 290px, (min-width: 640px) 45vw, 46vw"
-                    alt={single.coverAlt ?? `${single.title} cover art`}
-                    loading="lazy"
-                    decoding="async"
-                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    pictureAttributes={{ class: 'block h-full w-full' }}
-                  />
-                ) : (
-                  <div
-                    class="flex h-full w-full flex-col justify-between bg-[radial-gradient(circle_at_30%_20%,rgb(255_182_39/0.35),transparent_55%),radial-gradient(circle_at_80%_90%,rgb(34_228_255/0.3),transparent_55%)] p-4"
-                    role="img"
-                    aria-label={`${single.title} — typographic artwork`}
-                  >
-                    <span class="font-mono text-[0.65rem] tracking-[0.2em] text-fg/80 uppercase">LOP3Z</span>
-                    <span class="font-display text-4xl leading-none font-extrabold sm:text-5xl">
-                      <span class="name-gradient">{single.title}</span>
-                    </span>
-                    <Equalizer bars={7} height="22px" width="4px" />
-                  </div>
-                )}
-                <span
-                  class="absolute right-2.5 bottom-2.5 grid size-11 translate-y-2 place-items-center rounded-full bg-cyan text-ink opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
-                  aria-hidden="true"
-                >
-                  <svg viewBox="0 0 24 24" class="ml-0.5 size-5" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+      <!-- Tracklist -->
+      <div class="reveal">
+        <p class="label mb-3 text-[0.68rem] text-muted">Pick a track</p>
+        <ol class="divide-y divide-line border-y border-line">
+          <li>
+            <a href="#skelewu" class="track group" data-upcoming>
+              <span class="track-num text-gold">00</span>
+              <Picture
+                src={upcoming.cover}
+                formats={['avif', 'webp']}
+                widths={[64, 128]}
+                sizes="56px"
+                alt=""
+                loading="lazy"
+                class="size-14 object-cover"
+                pictureAttributes={{ class: 'block size-14 shrink-0 overflow-hidden' }}
+              />
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-lg font-bold">{upcoming.title}</span>
+                <span class="block truncate font-mono text-xs text-gold">
+                  <span data-before-release>Coming 23.10.26</span><span data-after-release>New single · Out now</span>
                 </span>
-              </div>
-              <div class="flex items-start justify-between gap-2 px-1 pt-3 pb-1">
-                <div class="min-w-0">
-                  <h3 class="truncate text-lg font-bold sm:text-xl">{single.title}</h3>
-                  {single.subtitle && <p class="truncate font-mono text-xs text-muted">{single.subtitle}</p>}
-                </div>
-                <Icon name="spotify" class="mt-1 size-4 shrink-0 text-muted transition-colors group-hover:text-[#1ED760]" />
-              </div>
-              <span class="sr-only">— listen on Spotify (opens in a new tab)</span>
+              </span>
+              <span class="label shrink-0 border border-gold/50 px-2 py-1 text-[0.6rem] text-gold" data-before-release>Soon</span>
+              <span class="label shrink-0 border border-gold/50 px-2 py-1 text-[0.6rem] text-gold" data-after-release>New</span>
             </a>
           </li>
-        ))
-      }
-    </ul>
+          {
+            singles.map((single, i) => (
+              <li>
+                <a
+                  href={single.spotify}
+                  target="_blank"
+                  rel="noopener"
+                  class="track group"
+                  data-embed={embed(single.spotify)}
+                  data-title={single.title}
+                  aria-current={i === 0 ? 'true' : undefined}
+                >
+                  <span class="track-num">{String(i + 1).padStart(2, '0')}</span>
+                  {single.cover && (
+                    <Picture
+                      src={single.cover}
+                      formats={['avif', 'webp']}
+                      widths={[64, 128]}
+                      sizes="56px"
+                      alt=""
+                      loading="lazy"
+                      class="size-14 object-cover"
+                      pictureAttributes={{ class: 'block size-14 shrink-0 overflow-hidden' }}
+                    />
+                  )}
+                  <span class="min-w-0 flex-1">
+                    <span class="block truncate text-lg font-bold">{single.title}</span>
+                    {single.subtitle && <span class="block truncate font-mono text-xs text-muted">{single.subtitle}</span>}
+                  </span>
+                  <span class="track-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" class="ml-0.5 size-4" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </span>
+                  <span class="sr-only">— play {single.title}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
   </div>
 </section>
 
 <script>
   const player = document.getElementById('spotify-player') as HTMLIFrameElement | null;
+  const nowPlaying = document.getElementById('now-playing');
+
   if (player?.dataset.src) {
     const load = () => {
-      player.src = player.dataset.src!;
+      if (!player.dataset.src) return;
+      player.src = player.dataset.src;
       player.removeAttribute('data-src');
     };
     if ('IntersectionObserver' in window) {
@@ -143,4 +160,22 @@ import Icon from './Icon.astro';
       load();
     }
   }
+
+  // Tracklist rows swap the embedded player instead of leaving the site.
+  const tracks = document.querySelectorAll<HTMLAnchorElement>('#music a[data-embed]');
+  tracks.forEach((a) =>
+    a.addEventListener('click', (e) => {
+      if (!player || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      e.preventDefault();
+      tracks.forEach((t) => t.removeAttribute('aria-current'));
+      a.setAttribute('aria-current', 'true');
+      player.removeAttribute('data-src');
+      player.src = a.dataset.embed!;
+      player.title = `Spotify player: ${a.dataset.title} by LOP3Z`;
+      if (nowPlaying) nowPlaying.textContent = a.dataset.title!;
+      if (window.matchMedia('(max-width: 1023px)').matches) {
+        player.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }),
+  );
 </script>
